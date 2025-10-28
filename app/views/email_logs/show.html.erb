@@ -1,0 +1,78 @@
+<div class="row">
+  <div class="col-md-10 mx-auto">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="card-title mb-0">Detalhes do Log - <%= @email_log.filename %></h2>
+        <%= link_to "← Voltar para Logs", email_logs_path, class: "btn btn-outline-secondary" %>
+      </div>
+      <div class="card-body">
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <h5>Informações Básicas</h5>
+            <table class="table table-sm">
+              <tr>
+                <td><strong>Arquivo:</strong></td>
+                <td><%= @email_log.filename %></td>
+              </tr>
+              <tr>
+                <td><strong>Status:</strong></td>
+                <td>
+                  <% if @email_log.status == 'success' %>
+                    <span class="badge bg-success">Sucesso</span>
+                  <% else %>
+                    <span class="badge bg-danger">Falha</span>
+                  <% end %>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Processado em:</strong></td>
+                <td><%= @email_log.processed_at.strftime("%d/%m/%Y %H:%M:%S") %></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <% if @email_log.status == 'success' && @email_log.extracted_data.present? %>
+          <div class="mb-4">
+            <h5>Dados Extraídos</h5>
+            <div class="card bg-light">
+              <div class="card-body">
+                <% data = JSON.parse(@email_log.extracted_data) %>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p><strong>Nome:</strong> <%= data['name'] %></p>
+                    <p><strong>Email:</strong> <%= data['email'] %></p>
+                    <p><strong>Telefone:</strong> <%= data['phone'] %></p>
+                  </div>
+                  <div class="col-md-6">
+                    <p><strong>Código do Produto:</strong> <%= data['product_code'] %></p>
+                    <p><strong>Assunto:</strong> <%= data['subject'] %></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <% if @email_log.status == 'failure' && @email_log.error_message.present? %>
+          <div class="mb-4">
+            <h5>Erro</h5>
+            <div class="alert alert-danger">
+              <strong>Mensagem de erro:</strong><br>
+              <%= @email_log.error_message %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="mb-4">
+          <h5>Dados Brutos (JSON)</h5>
+          <div class="card">
+            <div class="card-body">
+              <pre class="mb-0"><code><%= @email_log.extracted_data.present? ? JSON.pretty_generate(JSON.parse(@email_log.extracted_data)) : "Nenhum dado extraído" %></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

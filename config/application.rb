@@ -23,5 +23,8 @@ module EmailProcessor
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Configure Active Job to use Sidekiq
+    config.active_job.queue_adapter = :sidekiq
   end
 end

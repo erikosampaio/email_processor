@@ -1,0 +1,101 @@
+<div class="row">
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Logs de Processamento</h2>
+      <div>
+        <span class="badge bg-success me-2">Sucessos: <%= @success_count %></span>
+        <span class="badge bg-danger me-2">Falhas: <%= @failure_count %></span>
+        <span class="badge bg-primary">Total: <%= @email_logs.count %></span>
+      </div>
+    </div>
+    
+    <% if @email_logs.any? %>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Arquivo</th>
+              <th>Status</th>
+              <th>Data de Processamento</th>
+              <th>Dados Extraídos</th>
+              <th>Erro</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @email_logs.each do |log| %>
+              <tr>
+                <td><%= log.filename %></td>
+                <td>
+                  <% if log.status == 'success' %>
+                    <span class="badge bg-success">Sucesso</span>
+                  <% else %>
+                    <span class="badge bg-danger">Falha</span>
+                  <% end %>
+                </td>
+                <td><%= log.processed_at.strftime("%d/%m/%Y %H:%M") %></td>
+                <td>
+                  <% if log.extracted_data.present? %>
+                    <button class="btn btn-sm btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#data-<%= log.id %>">
+                      Ver Dados
+                    </button>
+                  <% else %>
+                    <span class="text-muted">-</span>
+                  <% end %>
+                </td>
+                <td>
+                  <% if log.error_message.present? %>
+                    <button class="btn btn-sm btn-outline-danger" type="button" data-bs-toggle="collapse" data-bs-target="#error-<%= log.id %>">
+                      Ver Erro
+                    </button>
+                  <% else %>
+                    <span class="text-muted">-</span>
+                  <% end %>
+                </td>
+                <td>
+                  <%= link_to "Ver Detalhes", email_log_path(log), class: "btn btn-sm btn-outline-primary" %>
+                </td>
+              </tr>
+              
+              <% if log.extracted_data.present? %>
+                <tr class="collapse" id="data-<%= log.id %>">
+                  <td colspan="6">
+                    <div class="card">
+                      <div class="card-body">
+                        <h6 class="card-title">Dados Extraídos:</h6>
+                        <pre class="bg-light p-3 rounded"><%= JSON.pretty_generate(JSON.parse(log.extracted_data)) %></pre>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+              
+              <% if log.error_message.present? %>
+                <tr class="collapse" id="error-<%= log.id %>">
+                  <td colspan="6">
+                    <div class="card">
+                      <div class="card-body">
+                        <h6 class="card-title text-danger">Erro:</h6>
+                        <pre class="bg-light p-3 rounded text-danger"><%= log.error_message %></pre>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="text-center py-5">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Nenhum log encontrado</h5>
+            <p class="card-text">Faça upload de arquivos .eml para gerar logs de processamento.</p>
+            <%= link_to "Fazer Upload", root_path, class: "btn btn-primary" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

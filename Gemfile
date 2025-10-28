@@ -28,6 +28,15 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
 
+# Background jobs with Sidekiq
+gem "sidekiq"
+gem "redis"
+
+# Email processing
+gem "mail"
+
+# Bootstrap via CDN (simpler approach)
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
@@ -49,6 +58,12 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # Testing framework
+  gem "rspec-rails", "~> 6.0"
+  gem "factory_bot_rails"
+  gem "faker"
+  gem "shoulda-matchers"
 end
 
 group :development do
@@ -56,8 +71,4 @@ group :development do
   gem "web-console"
 end
 
-group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara"
-  gem "selenium-webdriver"
-end
+## No system tests; we use unit tests with RSpec only

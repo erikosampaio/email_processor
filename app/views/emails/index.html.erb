@@ -1,0 +1,78 @@
+<div class="row">
+  <div class="col-md-8 mx-auto">
+    <!-- Mensagens de Flash -->
+    <% if flash[:success] %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle"></i>
+        <%= flash[:success] %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+    
+    <% if flash[:error] %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle"></i>
+        <%= flash[:error] %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+    
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title mb-0">Upload de Arquivos .eml</h2>
+      </div>
+      <div class="card-body">
+        <%= form_with url: emails_path, method: :post, multipart: true, local: true, class: "needs-validation", novalidate: true do |form| %>
+          <div class="mb-3">
+            <%= form.label :email_file, "Selecione um arquivo .eml:", class: "form-label" %>
+            <%= form.file_field :email_file, class: "form-control", accept: ".eml", required: true %>
+            <div class="invalid-feedback">
+              Por favor, selecione um arquivo .eml válido.
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <%= form.submit "Enviar para Processamento", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    
+    <div class="card mt-4">
+      <div class="card-header">
+        <h3 class="card-title mb-0">Instruções</h3>
+      </div>
+      <div class="card-body">
+        <ul class="list-unstyled">
+          <li><strong>Formato suportado:</strong> Arquivos .eml</li>
+          <li><strong>Remetentes suportados:</strong></li>
+          <ul>
+            <li>loja@fornecedorA.com</li>
+            <li>contato@parceiroB.com</li>
+          </ul>
+          <li><strong>Processamento:</strong> Os arquivos são processados em background</li>
+          <li><strong>Resultados:</strong> Verifique a aba "Logs" para acompanhar o processamento</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Validação do formulário
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    var forms = document.getElementsByClassName('needs-validation');
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>

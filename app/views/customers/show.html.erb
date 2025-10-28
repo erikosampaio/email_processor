@@ -1,0 +1,91 @@
+<div class="row">
+  <div class="col-md-8 mx-auto">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="card-title mb-0">Detalhes do Cliente</h2>
+        <%= link_to "← Voltar para Clientes", customers_path, class: "btn btn-outline-secondary" %>
+      </div>
+      <div class="card-body">
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <h5>Informações Pessoais</h5>
+            <table class="table table-sm">
+              <tr>
+                <td><strong>Nome:</strong></td>
+                <td><%= @customer.name %></td>
+              </tr>
+              <tr>
+                <td><strong>Email:</strong></td>
+                <td><%= @customer.email %></td>
+              </tr>
+              <tr>
+                <td><strong>Telefone:</strong></td>
+                <td><%= @customer.phone %></td>
+              </tr>
+            </table>
+          </div>
+          <div class="col-md-6">
+            <h5>Informações do Produto</h5>
+            <table class="table table-sm">
+              <tr>
+                <td><strong>Código do Produto:</strong></td>
+                <td><span class="badge bg-primary"><%= @customer.product_code %></span></td>
+              </tr>
+              <tr>
+                <td><strong>Assunto:</strong></td>
+                <td><%= @customer.subject %></td>
+              </tr>
+              <tr>
+                <td><strong>Cadastrado em:</strong></td>
+                <td><%= @customer.created_at.strftime("%d/%m/%Y %H:%M:%S") %></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h5>Histórico de Processamento</h5>
+          <div class="card">
+            <div class="card-body">
+              <% logs = EmailLog.where("extracted_data LIKE ?", "%#{@customer.email}%").recent %>
+              <% if logs.any? %>
+                <div class="table-responsive">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th>Arquivo</th>
+                        <th>Status</th>
+                        <th>Processado em</th>
+                        <th>Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% logs.each do |log| %>
+                        <tr>
+                          <td><%= log.filename %></td>
+                          <td>
+                            <% if log.status == 'success' %>
+                              <span class="badge bg-success">Sucesso</span>
+                            <% else %>
+                              <span class="badge bg-danger">Falha</span>
+                            <% end %>
+                          </td>
+                          <td><%= log.processed_at.strftime("%d/%m/%Y %H:%M") %></td>
+                          <td>
+                            <%= link_to "Ver Log", email_log_path(log), class: "btn btn-sm btn-outline-primary" %>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              <% else %>
+                <p class="text-muted">Nenhum log de processamento encontrado para este cliente.</p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
