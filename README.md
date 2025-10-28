@@ -83,7 +83,8 @@ bundle exec sidekiq
 
 ### 6. Acesse a aplicação
 
-Abra seu navegador em: `http://localhost:3000`
+- **Aplicação Rails**: `http://localhost:3000`
+- **Sidekiq Web UI**: `http://localhost:3000/sidekiq` (para monitorar jobs em background)
 
 ## 🔧 Como Subir o Ambiente (Redis, Sidekiq, Rails)
 

@@ -11,6 +11,10 @@ Rails.application.routes.draw do
   # Rotas para visualização de logs
   resources :email_logs, only: [:index, :show]
 
+  # Sidekiq Web UI - interface para monitoramento de jobs
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
