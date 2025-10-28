@@ -32,8 +32,3 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
-
-# Ignore project files
-/tech-test-desenvolvedor-pleno-main
-/cursor_an_lise_do_teste_t_cnico_para_de.md
-/TODO.md
